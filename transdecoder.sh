@@ -1,9 +1,10 @@
 #!/bin/bash
 #SBATCH --mem=5gb
-#SBATCH --time=01:00:00
+#SBATCH -t 01:00:00
+#SBATCH -o transdec.out
 
-assembly=`ls *fa*`
+assembly=$1
 
-TransDecoder.LongOrfs -t ${assembly}
-TransDecoder.Predict --no_refine_starts -t ${assembly}
+TransDecoder.LongOrfs -O transdec -t ${assembly}
+TransDecoder.Predict -O transdec --no_refine_starts -t ${assembly}
 
