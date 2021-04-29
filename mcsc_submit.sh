@@ -7,4 +7,6 @@
 
 path_to_mcsc=/home1/kdeweese/bin/MCSC_Decontamination
 
-sh $path_to_mcsc/MCSC_Decontamination.sh
+# $1 is .ini file for MCSC
+sh $path_to_mcsc/MCSC_Decontamination.sh $1
+
