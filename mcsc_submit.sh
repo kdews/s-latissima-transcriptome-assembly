@@ -3,10 +3,11 @@
 #SBATCH --mem-per-cpu=8gb
 #SBATCH -t 100:00:00
 #SBATCH -c 12
-#SBATCH -o mcsc.out
 
 path_to_mcsc=/home1/kdeweese/bin/MCSC_Decontamination
 
+source activate mcsc
+module load ghostscript
 # $1 is .ini file for MCSC
-sh $path_to_mcsc/MCSC_Decontamination.sh $1
+sh $path_to_mcsc/MCSC_decontamination.sh $1
 
