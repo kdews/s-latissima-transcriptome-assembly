@@ -93,7 +93,6 @@ num_total_seqs=`grep -c ">" $temp_output`
 if [ $((num_total_seqs)) = $((num_seqs_1 + num_seqs_2)) ]
 then
   printf "Transcriptome has been successfully filtered for orthologs!\n"
-  exit 0
 else
   printf "Error contcatenating! Something's not adding up...\n\
 num_total_seqs =/= num_collapsed_seqs + num_collapsed_seqs\n\
@@ -104,6 +103,8 @@ fi
 # Remove duplicated reads (reads exactly equal to chosen transcript clustering length) with cd-hit
 conda activate cd-hit
 cd-hit-dup -i $temp_output -o $output
+
+printf "All duplicate transcripts have been removed.\n"
 
 # Delete temporary files
 rm $temp_output
