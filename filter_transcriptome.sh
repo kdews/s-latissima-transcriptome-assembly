@@ -21,6 +21,10 @@ Requires:   GNU parallel   seqtk   cd-hit-auxtools\n"
   exit 0
 fi
 
+# Header of output
+printf "filter_transcriptome.sh by Kelly DeWeese\n\
+Github: https://github.com/kellywithsword\n\n"
+
 # Define positional arguments
 ortho_collapsed=$1
 ortho_short_genes=$2
@@ -72,7 +76,7 @@ num_seqs_2=`grep -c ">" ${ortho_short_genes}.fa`
 # Verify that number of sequences in FASTAs is equal to ortholog IDs; if not, break
 if [ $num_ids_1 != $num_seqs_1 ] || [ $num_ids_2 != $num_seqs_2 ]
 then
-  printf "Subsampling error! Check to make sure ${ortho_collapsed}_IDs.txt | ${ortho_collapsed}.fa \
+  printf "\nSubsampling error! Check to make sure ${ortho_collapsed}_IDs.txt | ${ortho_collapsed}.fa \
 and ${ortho_short_genes}_IDs.txt | ${ortho_short_genes}.fa have matching sequence identifiers, and \
 that ${ortho_collapsed}_IDs.txt and ${ortho_short_genes}_IDs.txt contain no duplicate sequence IDs.\n\
 # of:\tIDs\tsequences\n\
@@ -82,7 +86,7 @@ that ${ortho_collapsed}_IDs.txt and ${ortho_short_genes}_IDs.txt contain no dupl
 fi
 
 # Concatenate orthologs into a new transcriptome assembly FASTA ($temp_output)
-cat ${ortho_collapsed}.fa >> $temp_output
+cat ${ortho_collapsed}.fa > $temp_output
 cat ${ortho_short_genes}.fa >> $temp_output
 
 # Count total number of ortholog sequences added to new transcriptome assembly
@@ -92,20 +96,22 @@ num_total_seqs=`grep -c ">" $temp_output`
 # to the sum of sequences in 
 if [ $((num_total_seqs)) = $((num_seqs_1 + num_seqs_2)) ]
 then
-  printf "Transcriptome has been successfully filtered for orthologs!\n"
+  printf "\nTranscriptome has been successfully filtered for orthologs!\n"
 else
-  printf "Error contcatenating! Something's not adding up...\n\
+  printf "\nError contcatenating! Something's not adding up...\n\
 num_total_seqs =/= num_collapsed_seqs + num_collapsed_seqs\n\
 $num_total_seqs =/= $num_seqs_1 + $num_seqs_2 \n" 1>&2
   exit 1
 fi
 
-# Remove duplicated reads (reads exactly equal to chosen transcript clustering length) with cd-hit
+# Remove duplicated transcripts (transcripts exactly equal to chosen transcript clustering length) with cd-hit
+printf "\nRemoving duplicate transcripts...\n\
+CD-HIT-DUP output:\n"
 conda activate cd-hit
 cd-hit-dup -i $temp_output -o $output
 
-printf "All duplicate transcripts have been removed.\n"
+printf "\nAll duplicate transcripts have been removed.\n"
 
 # Delete temporary files
 rm $temp_output
-
+rm $output*.clstr
