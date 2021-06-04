@@ -4,8 +4,20 @@
 #SBATCH -t 01:00:00
 #SBATCH -o transdec.out
 
-assembly=$1
+# Help message
+if [[ $1 = "-h" ]] || [[ $1 = "--help" ]]; then
+  printf "Usage: sbatch transdecoder_submit.sh out_dir assembly\n\n\
+Requires: TransDecoder \
+(https://transdecoder.github.io/)\n"
+  exit 0
+fi
 
-TransDecoder.LongOrfs -O filtering/transdec -t ${assembly}
-TransDecoder.Predict -O filtering/transdec --no_refine_starts -t ${assembly}
+# Define positional variables
+outdir=$1
+assembly=$2
+
+source activate transdec
+
+TransDecoder.LongOrfs -O $outdir -t $assembly
+TransDecoder.Predict -O $outdir --no_refine_starts -t $assembly
 
