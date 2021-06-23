@@ -67,7 +67,9 @@ printf "Found $num_ids_2 orthologs in the second transcriptome.\n"
 # Subsample orthologs from transcript FASTAs with seqtk
 conda activate seqtk
 parallel -j $SLURM_NTASKS --joblog filter-logs/seqtk.joblog --link \
-"seqtk subseq {1} {2}/{2}_IDs.txt > {2}.fa" ::: $collapsed_transcriptome $short_genes_from_transcriptome ::: $ortho_collapsed $ortho_short_genes
+"seqtk subseq {1} {2}/{2}_IDs.txt > {2}.fa" ::: \
+$collapsed_transcriptome $short_genes_from_transcriptome ::: \
+$ortho_collapsed $ortho_short_genes
 
 # Count number of sequences in each new FASTA ($3 and $4)
 num_seqs_1=`grep -c ">" ${ortho_collapsed}.fa`
