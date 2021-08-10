@@ -1,0 +1,11 @@
+==========================================
+SLURM_JOB_ID = 1059263
+SLURM_JOB_NODELIST = b08-06
+TMPDIR = /tmp/SLURM_1059263
+==========================================
+Usage: sbatch trinity_submit.sbatch <samples_file> <output_directory>
+
+Requires Trinity.
+(http://trinityrnaseq.github.io)
+Note: See documentation for <samples_file> format from Trinity docs.
+
